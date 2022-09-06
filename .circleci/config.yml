@@ -61,7 +61,7 @@ workflows:
       - build-docker:
           context: docker
           requires:
-            - build
+            - build-app
           filters:
             branches:
               only: main
