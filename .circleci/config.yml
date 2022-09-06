@@ -6,7 +6,7 @@ executors:
     docker:
       - image: circleci/buildpack-deps:stretch
 jobs:
-  build:
+  build-app:
     docker:
       - image: circleci/openjdk:8-jdk
     working_directory: ~/project
@@ -55,7 +55,7 @@ workflows:
   version: 2
   build-app:
     jobs:
-      - build
+      - build-app
   build-docker:
     jobs:
       - build-docker:
