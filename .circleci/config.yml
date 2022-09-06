@@ -60,12 +60,14 @@ workflows:
   build-docker:
     jobs:
       - build-docker:
+          context: docker
           requires:
             - build
           filters:
             branches:
               only: main
       - publish-latest-docker:
+          context: docker
           requires:
             - build-docker
           filters:
