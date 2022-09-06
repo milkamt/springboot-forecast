@@ -17,6 +17,7 @@ jobs:
             - v1-dependencies-{{ checksum "build.gradle" }}
             - v1-dependencies-
       - run: gradle dependencies
+      - run: ./gradlew
       - save_cache:
           paths:
             - ~/.gradle
@@ -29,7 +30,7 @@ jobs:
       - run:
           name: Build Docker Image
           command: |
-            docker build -t $IMAGE_NAME:latest
+            docker build -t $IMAGE_NAME:latest .
       - run:
           name: Archive Docker image
           command: docker save -o image.tar $IMAGE_NAME
@@ -53,12 +54,12 @@ jobs:
             docker push $IMAGE_NAME:latest
 workflows:
   version: 2
-  build-app:
+  build:
     jobs:
       - build-app
-  build-docker:
-    jobs:
       - build-docker:
+          requires:
+            - build-app
           context: docker
           filters:
             branches:
