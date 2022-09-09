@@ -9,13 +9,6 @@ jobs:
   build-app:
     docker:
       - image: circleci/openjdk:8-jdk
-        environment:
-          {
-            spring.datasource.url=$DATABASE_URL
-            spring.datasource.username=$DATABASE_USERNAME
-            spring.datasource.password=$DATABASE_PASSWORD
-            spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5Dialect
-          }
     working_directory: ~/project
     steps:
       - checkout
@@ -64,17 +57,16 @@ workflows:
   build:
     jobs:
       - build-app
-      - build-docker:
-          requires:
-            - build-app
-          context: docker
-          filters:
-            branches:
-              only: main
-      - publish-latest-docker:
-          context: docker
-          requires:
-            - build-docker
-          filters:
-            branches:
-              only: main
+#      - build-docker:
+#          requires:
+#            - build-app
+#          filters:
+#            branches:
+#              only: main
+#      - publish-latest-docker:
+#          context: docker
+#          requires:
+#            - build-docker
+#          filters:
+#            branches:
+#              only: main
