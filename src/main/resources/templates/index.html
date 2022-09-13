@@ -5,8 +5,28 @@
     <title>Forecast</title>
 </head>
 <body>
-    <h1>Hello!</h1>
-    <a th:href="@{/user/register/form}">Sign up</a>
-    <a th:href="@{/login}">Sign in</a>
+    <div class="header">
+        <ul>
+            <li><a th:href="@{/user/register/form}">Sign up</a></li>
+            <li><a th:href="@{/login}">Sign in</a></li>
+        </ul>
+        <h1>Spring Boot weather app</h1>
+    </div>
+    <div class="weather_table">
+        <table>
+            <tr>
+                <th>CITY</th>
+                <th>DESCRIPTION</th>
+                <th>TEMPERATURE</th>
+                <th>FEELS LIKE</th>
+            </tr>
+            <tr th:each="city : ${weather}">
+                <td th:text="${city.city}">CITY</td>
+                <td th:text="${city.description}">DESCRIPTION</td>
+                <td th:text="|${city.temperature} °C|">TEMPERATURE</td>
+                <td th:text="|${city.feelsLike} °C|"></td>
+            </tr>
+        </table>
+    </div>
 </body>
 </html>
