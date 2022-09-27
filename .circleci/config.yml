@@ -28,7 +28,7 @@ jobs:
     working_directory: ~/project
     steps:
       - checkout
-      - run: chmod +x ./gradlew test
+      - run: gradle test
   build-docker:
     executor: docker-publisher
     steps:
