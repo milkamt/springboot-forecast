@@ -12,6 +12,8 @@ jobs:
             spring.datasource.username=$DATASOURCE_DB_USERNAME
             spring.datasource.password=$DATASOURCE_DB_PASSWORD
             spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5Dialect
+            api_openweathermap_key=$API_OPENWEATHERMAP_KEY
+            api_openweatherapp_url=$API_OPENWEATHERMAP_URL
           }
       - image: cimg/mysql:8.0
         environment:
