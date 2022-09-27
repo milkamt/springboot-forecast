@@ -2,6 +2,9 @@ version: 2.1
 orbs:
   gradle: circleci/gradle@3.0.0
 executors:
+  jdk-docker-image:
+    docker:
+      - image: cimg/openjdk:18.0.2
   docker-publisher:
     environment:
       IMAGE_NAME: milkamt/springboot-forecast
@@ -58,7 +61,8 @@ jobs:
 workflows:
   checkout-build-test:
     jobs:
-      - gradle/test
+      - gradle/test:
+          executor: jdk-docker-image
 #     - build-docker:
 #          requires:
 #            - build-app
