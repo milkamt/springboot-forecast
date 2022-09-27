@@ -4,35 +4,25 @@ orbs:
 executors:
   jdk-docker-image:
     docker:
-      - image: cimg/openjdk:18.0.2
       - image: cimg/mysql:8.0
         environment:
           MYSQL_USER: $DATASOURCE_DB_USERNAME
           MYSQL_PASSWORD: $DATASOURCE_DB_PASSWORD
           MYSQL_DATABASE: $DATASOURCE_DB
+      - image: cimg/openjdk:18.0.2
+        environment:
+          {
+            spring.datasource.url=jdbc:mysql://$DATASOURCE_URL/$DATASOURCE_DB
+            spring.datasource.username=$DATASOURCE_DB_USERNAME
+            spring.datasource.password=$DATASOURCE_DB_PASSWORD
+            spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5Dialect
+          }
   docker-publisher:
     environment:
       IMAGE_NAME: milkamt/springboot-forecast
     docker:
       - image: circleci/buildpack-deps:stretch
 jobs:
-#  build-app:
-#    docker:
-#      - image: circleci/openjdk:11-jdk
-#    working_directory: ~/project
-#    steps:
-#      - checkout
-#      - run: chmod +x ./gradlew
-#      - restore_cache:
-#          keys:
-#            - v1-dependencies-{{ checksum "build.gradle" }}
-#            - v1-dependencies-
-#      - run: ./gradlew dependencies
-#      - save_cache:
-#          paths:
-#            - ~/.gradle
-#          key: v1-dependencies-{{ checksum "build.gradle" }}
-#      - run: ./gradlew test --stacktrace
   build-docker:
     executor: docker-publisher
     steps:
