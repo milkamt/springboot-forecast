@@ -7,9 +7,9 @@ executors:
       - image: cimg/openjdk:18.0.2
     environment:
       {
-        spring.datasource.url=jdbc:mysql://${DATASOURCE_URL}/${DATASOURCE_DB},
-        spring.datasource.username=$DATASOURCE_DB_USERNAME,
-        spring.datasource.password=$DATASOURCE_DB_PASSWORD,
+        spring.datasource.url=jdbc:mysql://$DATASOURCE_URL/$DATASOURCE_DB
+        spring.datasource.username=$DATASOURCE_DB_USERNAME
+        spring.datasource.password=$DATASOURCE_DB_PASSWORD
         spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5Dialect
       }
   docker-publisher:
