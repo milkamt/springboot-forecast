@@ -18,7 +18,6 @@ jobs:
     working_directory: ~/project
     steps:
       - checkout
-      - run: java --version
       - run: chmod +x gradlew
       # Download and cache dependencies
       - restore_cache:
