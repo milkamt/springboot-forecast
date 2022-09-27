@@ -31,13 +31,8 @@ jobs:
             DOCKERIZE_VERSION: v0.6.1
       - run:
           name: Wait for db
-          command: dockerize -wait tcp://localhost:3306 -timeout 1m
-      - run:
-          name: Install mysql
-          command: sudo apt install mysql-server
-      - run:
-          name: Create database for testing
-          command: mysql -h 127.0.0.1 -u root -e "create database $DATASOURCE_DB"
+          command: dockerize -wait tcp://localhost:3306/$DATASOURCE_DB -timeout 1m
+
       - run: chmod +x ./gradlew
       - restore_cache:
           keys:
