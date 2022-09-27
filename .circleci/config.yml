@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  gradle: circleci/gradle@3.0.0
 executors:
   docker-publisher:
     environment:
@@ -6,23 +8,23 @@ executors:
     docker:
       - image: circleci/buildpack-deps:stretch
 jobs:
-  build-app:
-    docker:
-      - image: circleci/openjdk:11-jdk
-    working_directory: ~/project
-    steps:
-      - checkout
-      - run: chmod +x ./gradlew
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "build.gradle" }}
-            - v1-dependencies-
-      - run: ./gradlew dependencies
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: v1-dependencies-{{ checksum "build.gradle" }}
-      - run: ./gradlew test --stacktrace
+#  build-app:
+#    docker:
+#      - image: circleci/openjdk:11-jdk
+#    working_directory: ~/project
+#    steps:
+#      - checkout
+#      - run: chmod +x ./gradlew
+#      - restore_cache:
+#          keys:
+#            - v1-dependencies-{{ checksum "build.gradle" }}
+#            - v1-dependencies-
+#      - run: ./gradlew dependencies
+#      - save_cache:
+#          paths:
+#            - ~/.gradle
+#          key: v1-dependencies-{{ checksum "build.gradle" }}
+#      - run: ./gradlew test --stacktrace
   build-docker:
     executor: docker-publisher
     steps:
@@ -54,11 +56,10 @@ jobs:
             echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
             docker push $IMAGE_NAME:latest
 workflows:
-  version: 2
-  build:
+  checkout-build-test:
     jobs:
-      - build-app
-#      - build-docker:
+      - gradle/test
+#     - build-docker:
 #          requires:
 #            - build-app
 #          filters:
