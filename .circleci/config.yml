@@ -1,6 +1,4 @@
 version: 2.1
-orbs:
-  gradle: circleci/gradle@3.0.0
 executors:
   jdk-docker-image:
     docker:
@@ -17,67 +15,40 @@ executors:
             spring.datasource.password=$DATASOURCE_DB_PASSWORD
             spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5Dialect
           }
-  docker-publisher:
-    environment:
-      IMAGE_NAME: milkamt/springboot-forecast
-    docker:
-      - image: circleci/buildpack-deps:stretch
 jobs:
-  build-docker:
-    executor: docker-publisher
+  build-and-test:
+    docker:
+      - image: cimg/mysql:8.0
+        environment:
+          MYSQL_USER: $DATASOURCE_DB_USERNAME
+          MYSQL_PASSWORD: $DATASOURCE_DB_PASSWORD
+          MYSQL_DATABASE: $DATASOURCE_DB
+      - image: cimg/openjdk:18.0.2
+        environment:
+          {
+            spring.datasource.url=jdbc:mysql://$DATASOURCE_URL/$DATASOURCE_DB
+            spring.datasource.username=$DATASOURCE_DB_USERNAME
+            spring.datasource.password=$DATASOURCE_DB_PASSWORD
+            spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5Dialect
+          }
     steps:
       - checkout
-      - setup_remote_docker
-      - run:
-          name: Build Docker Image
-          command: |
-            docker build -t $IMAGE_NAME:latest .
-      - run:
-          name: Archive Docker image
-          command: docker save -o image.tar $IMAGE_NAME
-      - persist_to_workspace:
-          root: .
+      - run: chmod +x gradlew
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "build.gradle" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      - run: ./gradlew dependencies
+      - save_cache:
           paths:
-            - ./image.tar
-  publish-latest-docker:
-    executor: docker-publisher
-    steps:
-      - attach_workspace:
-          at: /tmp/workspace
-      - setup_remote_docker
-      - run:
-          name: Load archived Docker image
-          command: docker load -i /tmp/workspace/image.tar
-      - run:
-          name: Publish Docker Image to Docker Hub
-          command: |
-            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
-            docker push $IMAGE_NAME:latest
+            - ~/.m2
+          key: v1-dependencies-{{ checksum "build.gradle" }}
+      # run tests!
+      - run: ./gradlew test
+
 workflows:
   checkout-build-test:
     jobs:
-      - gradle/test:
-          executor: jdk-docker-image
-          context: forecast-database
-          pre-steps:
-            - run:
-                name: Install dockerize
-                command: wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
-                environment:
-                  DOCKERIZE_VERSION: v0.6.1
-            - run:
-                name: Wait for db
-                command: dockerize -wait tcp://$DATASOURCE_URL -timeout 1m
-#     - build-docker:
-#          requires:
-#            - build-app
-#          filters:
-#            branches:
-#              only: main
-#      - publish-latest-docker:
-#          context: docker
-#          requires:
-#            - build-docker
-#          filters:
-#            branches:
-#              only: main
+      - build-and-test
