@@ -12,6 +12,7 @@ jobs:
             spring.datasource.username=$DATASOURCE_DB_USERNAME
             spring.datasource.password=$DATASOURCE_DB_PASSWORD
             spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5Dialect
+            spring.datasource.driver-class-name=com.mysql.jdbc.Driver
             api_openweathermap_key=$API_OPENWEATHERMAP_KEY
             api_openweathermap_url=$API_OPENWEATHERMAP_URL
           }
@@ -31,6 +32,12 @@ jobs:
       - run:
           name: Wait for db
           command: dockerize -wait tcp://localhost:3306 -timeout 1m
+      - run:
+          name: Install mysql-client
+          command: sudo apt-get install mysql-client
+      - run:
+          name: Create database for testing
+          command: mysql -h 127.0.0.1 -u root -e "create database $DATASOURCE_DB"
       - run: chmod +x ./gradlew
       - restore_cache:
           keys:
