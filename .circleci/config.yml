@@ -1,4 +1,4 @@
-version: 2.1
+version: 2
 jobs:
   build-and-test:
     docker:
@@ -37,4 +37,5 @@ jobs:
 workflows:
   checkout-build-test:
     jobs:
-      - build-and-test
+      - build-and-test:
+          context: forecast-database
