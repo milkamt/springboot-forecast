@@ -3,6 +3,9 @@ jobs:
   build-and-test:
     docker:
       - image: circleci/openjdk:17
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASS
         environment:
           {
             spring.datasource.url=jdbc:mysql://localhost:3306/$DATASOURCE_DB
@@ -44,4 +47,6 @@ workflows:
   checkout-build-test:
     jobs:
       - build-and-test:
-          context: forecast-database
+          context:
+            - forecast-database
+            - docker
