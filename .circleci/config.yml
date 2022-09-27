@@ -67,7 +67,7 @@ workflows:
                   DOCKERIZE_VERSION: v0.6.1
             - run:
                 name: Wait for db
-                command: dockerize -wait tcp://localhost:3306 -timeout 1m
+                command: dockerize -wait tcp://$DATASOURCE_URL -timeout 1m
 #     - build-docker:
 #          requires:
 #            - build-app
