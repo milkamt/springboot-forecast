@@ -22,12 +22,6 @@ jobs:
           paths:
             - ~/.gradle
           key: v1-dependencies-{{ checksum "build.gradle" }}
-  run-tests:
-    docker:
-      - image: circleci/openjdk:8-jdk
-    working_directory: ~/project
-    steps:
-      - checkout
       - run: gradle test
   build-docker:
     executor: docker-publisher
@@ -64,9 +58,6 @@ workflows:
   build:
     jobs:
       - build-app
-      - run-tests:
-          requires:
-            - build-app
 #      - build-docker:
 #          requires:
 #            - build-app
