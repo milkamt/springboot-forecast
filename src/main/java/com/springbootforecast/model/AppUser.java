@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -21,4 +22,6 @@ public class AppUser {
     private final String role = "ROLE_USER";
     @Column(columnDefinition = "integer default 1")
     private final Integer enabled = 1;
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<Weather> weathers;
 }

@@ -1,6 +1,6 @@
 package com.springbootforecast.service;
 
-import com.springbootforecast.dto.Weather;
+import com.springbootforecast.dto.WeatherDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,21 +11,21 @@ import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-public class WeatherApiServiceImplTests {
+public class WeatherDtoApiServiceImplTests {
 
     @Autowired
     private WeatherApiService weatherApiService;
 
     @Test
     public void getWeatherOK() {
-        Weather weather = weatherApiService.getWeather("Bratislava");
+        WeatherDto weather = weatherApiService.getWeather("Bratislava");
 
         assertThat(weather).isNotNull();
     }
 
     @Test
     public void getCentralEuropeCapitalsOK() {
-        List<Weather> weathers = weatherApiService.getCentralEuropeCapitals();
+        List<WeatherDto> weathers = weatherApiService.getCentralEuropeCapitals();
 
         assertEquals(weathers.size(), 5);
     }

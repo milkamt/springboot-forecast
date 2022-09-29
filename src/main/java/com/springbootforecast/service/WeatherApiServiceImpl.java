@@ -3,7 +3,7 @@ package com.springbootforecast.service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.springbootforecast.constant.Cities;
-import com.springbootforecast.dto.Weather;
+import com.springbootforecast.dto.WeatherDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +28,7 @@ public class WeatherApiServiceImpl implements WeatherApiService {
     private final ObjectMapper objectMapper;
 
     @Override
-    public Weather getWeather(String city) {
+    public WeatherDto getWeather(String city) {
         URI url = new UriTemplate(WEATHER_URL).expand(city,API_KEY);
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
 
@@ -36,19 +36,19 @@ public class WeatherApiServiceImpl implements WeatherApiService {
     }
 
     @Override
-    public List<Weather> getCentralEuropeCapitals() {
+    public List<WeatherDto> getCentralEuropeCapitals() {
         Cities cities = new Cities();
-        List<Weather> weather = new ArrayList<>();
+        List<WeatherDto> weather = new ArrayList<>();
         for (String city : cities.getCentralEuropeCapitals()) {
             weather.add(getWeather(city));
         }
         return weather;
     }
 
-    private Weather convert(ResponseEntity<String> response) {
+    private WeatherDto convert(ResponseEntity<String> response) {
         try {
             JsonNode root = objectMapper.readTree(response.getBody());
-            return new Weather(
+            return new WeatherDto(
                     root.path("name").asText(),
                     root.path("weather").get(0).path("main").asText(),
                     BigDecimal.valueOf(root.path("main").path("temp").asDouble()),

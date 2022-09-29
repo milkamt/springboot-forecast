@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Weather implements Serializable {
+public class WeatherDto implements Serializable {
     private String city;
     private String description;
     private BigDecimal temperature;
