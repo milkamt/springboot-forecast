@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Detail</title>
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
+            integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"
+    >
+    <link rel="stylesheet" href="../static/detailsStyles.css" th:href="@{/detailsStyles.css}">
+</head>
+<body>
+    <section class="table-wrapper">
+        <table class="table">
+            <tbody th:each="city : ${detail}">
+            <tr>
+                <th scope="col">CITY</th>
+                <td th:text="${city.city}">CITY</td>
+            </tr>
+            <tr>
+                <th scope="col">DESCRIPTION</th>
+                <td th:text="${city.description}">DESCRIPTION</td>
+            </tr>
+            <tr>
+                <th scope="col">TEMPERATURE</th>
+                <td th:text="|${city.temperature} °C|">TEMPERATURE</td>
+            </tr>
+            <tr>
+                <th scope="col">FEELS LIKE</th>
+                <td th:text="|${city.feelsLike} °C|">FEELS LIKE</td>
+            </tr>
+            <tr>
+                <th scope="col">MIN TEMPERATURE</th>
+                <td th:text="|${city.temp_min} °C|">MIN TEMPERATURE</td>
+            </tr>
+            <tr>
+                <th scope="col">MAX TEMPERATURE</th>
+                <td th:text="|${city.temp_max} °C|">MAX TEMPERATURE</td>
+            </tr>
+            <tr>
+                <th scope="col">HUMIDITY</th>
+                <td th:text="|${city.humidity} %|">HUMIDITY</td>
+            </tr>
+            <tr>
+                <th scope="col">PRESSURE</th>
+                <td th:text="|${city.pressure} hPa|">PRESSURE</td>
+            </tr>
+            <tr>
+                <th scope="col">RAIN</th>
+                <td th:text="|${city.rain} mm|">RAIN</td>
+            </tr>
+            <tr>
+                <th scope="col">WIND SPEED</th>
+                <td th:text="|${city.windSpeed} meter/sec|">WIND SPEED</td>
+            </tr>
+            <tr>
+                <th scope="col">SUNRISE</th>
+                <td th:text="|${city.sunrise}|">SUNRISE</td>
+            </tr>
+            <tr>
+                <th scope="col">SUNSET</th>
+                <td th:text="|${city.sunset}|">SUNSET</td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</body>
+</html>

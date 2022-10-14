@@ -38,7 +38,10 @@
                 </thead>
                 <tbody>
                 <tr th:each="city : ${weather}">
-                    <td th:text="${city.city}">CITY</td>
+                    <td>
+                        <a th:href="@{/detail/{city}(city = ${city.city})}"
+                           th:text="${city.city}">CITY</a>
+                    </td>
                     <td th:text="${city.description}">DESCRIPTION</td>
                     <td th:text="|${city.temperature} °C|">TEMPERATURE</td>
                     <td th:text="|${city.feelsLike} °C|"></td>
