@@ -23,6 +23,8 @@ public class WeatherController {
     public String searchCity(@RequestParam String city,
                              Model model) {
         model.addAttribute("weather", weatherApiService.getWeather(city));
+
+        System.out.println(weatherApiService.getWeatherDetail(city));
         return "index";
     }
 }
