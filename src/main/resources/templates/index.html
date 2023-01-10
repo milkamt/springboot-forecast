@@ -13,10 +13,6 @@
 <body>
     <section>
         <div class="header">
-            <ul>
-                <li><a th:href="@{/user/register/form}">Sign up</a></li>
-                <li><a th:href="@{/login}">Sign in</a></li>
-            </ul>
             <h1>Spring Boot weather app</h1>
         </div>
         <div class="weather_table">
@@ -37,6 +33,17 @@
                 </tr>
                 </thead>
                 <tbody>
+
+                <tr th:if="${searchResult}" th:each="city : ${searchResult}">
+                    <td>
+                        <a th:href="@{/detail/{city}(city = ${city.city})}"
+                           th:text="${city.city}">CITY</a>
+                    </td>
+                    <td th:text="${city.description}">DESCRIPTION</td>
+                    <td th:text="|${city.temperature} °C|">TEMPERATURE</td>
+                    <td th:text="|${city.feelsLike} °C|"></td>
+                </tr>
+
                 <tr th:each="city : ${weather}">
                     <td>
                         <a th:href="@{/detail/{city}(city = ${city.city})}"

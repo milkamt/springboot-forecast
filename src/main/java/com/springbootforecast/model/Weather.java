@@ -19,6 +19,4 @@ public class Weather {
     private String description;
     private BigDecimal temperature;
     private BigDecimal feelsLike;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private AppUser user;
 }

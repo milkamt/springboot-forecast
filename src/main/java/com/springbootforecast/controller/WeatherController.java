@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
@@ -22,9 +23,9 @@ public class WeatherController {
 
     @PostMapping("/search")
     public String searchCity(@RequestParam String city,
-                             Model model) {
-        model.addAttribute("weather", weatherApiService.getWeather(city));
-        return "index";
+                             RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("searchResult", weatherApiService.getWeather(city));
+        return "redirect:/";
     }
 
     @GetMapping("/detail/{city}")
